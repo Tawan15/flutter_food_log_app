@@ -1,41 +1,41 @@
+// ignore_for_file: non_constant_identifier_names
 class Food {
   String? id;
-  DateTime? created_at;
-  DateTime? foodData;
-  String? foodMeal;
-  String? foodName;
-  double? foodPrice;
-  int? foodPerson;
+  String foodDate;
+  String foodMeal;
+  String foodName;
+  double foodPrice;
+  int foodPerson;
 
   Food({
     this.id,
-    this.created_at,
-    this.foodData,
-    this.foodMeal,
-    this.foodName,
-    this.foodPrice,
-    this.foodPerson,
+    required this.foodDate,
+    required this.foodMeal,
+    required this.foodName,
+    required this.foodPrice,
+    required this.foodPerson,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'created_at': created_at?.toIso8601String(),
-      'foodData': foodData?.toIso8601String(),
-      'foodMeal': foodMeal,
-      'foodName': foodName,
-      'foodPrice': foodPrice,
-      'foodPerson': foodPerson,
-    };
+//แปลงข้อมูลที่รับมาจาก Supabase เพื่อมาใช้ในแอปฯ
+  factory Food.fromJson(Map<String, dynamic> json) {
+    return Food(
+      id: json['id'],
+      foodDate: json['foodDate'],
+      foodMeal: json['foodMeal'],
+      foodName: json['foodName'],
+      foodPrice: (json['foodPrice'] as num).toDouble(),
+      foodPerson: json['foodPerson'],
+    );
   }
 
-  factory Food.fromMap(Map<String, dynamic> map)  =>Food (
-      id: map['id'] as String,
-      created_at: DateTime.parse(map['created_at'] as String),
-      foodData: DateTime.parse(map['foodData'] as String),
-      foodMeal: map['foodMeal'] as String,
-      foodName: map['foodName'] as String,
-      foodPrice: map['foodPrice'] as double,
-      foodPerson: map['foodPerson'] as int,
-    );
+//แปลงข้อมูลจากแอปฯ เพื่อส่งไปยัง Supabase
+  Map<String, dynamic> toJson() {
+    return {
+      "foodDate": foodDate,
+      "foodMeal": foodMeal,
+      "foodName": foodName,
+      "foodPrice": foodPrice,
+      "foodPerson": foodPerson,
+    };
+  }
 }
