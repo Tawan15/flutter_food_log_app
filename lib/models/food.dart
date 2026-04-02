@@ -1,4 +1,7 @@
+//คลาสนี้ใช้สำหรับทำงานร่วมกับตารางในฐานข้อมูลที่จะทำงานด้วย
+
 // ignore_for_file: non_constant_identifier_names
+
 class Food {
   String? id;
   String foodDate;

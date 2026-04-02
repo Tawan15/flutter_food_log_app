@@ -1,8 +1,8 @@
-// ignore_for_file: sort_child_properties_last
-import 'package:flutter_food_log_app/services/supabase_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_food_log_app/views/add_food_ui.dart';
 import 'package:flutter_food_log_app/models/food.dart';
+import 'package:flutter_food_log_app/views/add_food_ui.dart';
+import 'package:flutter_food_log_app/services/supabase_service.dart';
+import 'package:flutter_food_log_app/views/update_del_food_ui.dart';
 
 class ShowAllFoodUi extends StatefulWidget {
   const ShowAllFoodUi({super.key});
@@ -12,11 +12,14 @@ class ShowAllFoodUi extends StatefulWidget {
 }
 
 class _ShowAllFoodUiState extends State<ShowAllFoodUi> {
-  final service = SupabaseService();
   List<Food> foods = [];
 
+  final Service = SupabaseService();
+
+  //สร้างเมธอด
   void loadAllFood() async {
-    final data = await service.getAllFood();
+    //สร้างตัวแปรเก็บข้อมูล
+    final data = await Service.getAllFood();
     setState(() {
       foods = data;
     });
@@ -24,6 +27,7 @@ class _ShowAllFoodUiState extends State<ShowAllFoodUi> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     loadAllFood();
   }
@@ -35,9 +39,7 @@ class _ShowAllFoodUiState extends State<ShowAllFoodUi> {
         backgroundColor: Colors.green,
         title: Text(
           'กินกับหนู LOG',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -45,7 +47,6 @@ class _ShowAllFoodUiState extends State<ShowAllFoodUi> {
         child: Column(
           children: [
             SizedBox(height: 40),
-            // ส่วนแสดง Logo
             Image.asset(
               'assets/images/logo.png',
               width: 180,
@@ -55,35 +56,50 @@ class _ShowAllFoodUiState extends State<ShowAllFoodUi> {
             SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                  itemCount: foods.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                        left: 30,
-                        right: 30,
-                        top: 5,
-                        bottom: 5,
+                itemCount: foods.length,
+                //สร้างหน้าตา
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding:
+                        EdgeInsets.only(left: 30, right: 30, top: 5, bottom: 5),
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UpdateDelFoodUi(
+                              //ส่งข้อมูลไปหน้า UpdateDelFoodUi
+                              food: foods[index],
+                            ),
+                          ),
+                        ).then((value) {
+                          //กลับมาหน่าแล้วจะให้ทำอะไร
+                          //เรียก
+                          loadAllFood();
+                        });
+                      },
+                      leading: Image.asset(
+                        'assets/images/food.png',
                       ),
-                      child: ListTile(
-                        onTap: () {},
-                        leading: Image.asset(
-                          'assets/images/food.png',
-                        ),
-                        trailing: Icon(Icons.info, color: Colors.red),
-                        title: Text(
-                          'กิน ${foods[index].foodName}',
-                        ),
-                        subtitle: Text(
-                          'วันที่: ${foods[index].foodDate} มื้อ: ${foods[index].foodMeal}',
-                        ),
-                        tileColor: index % 2 == 0
-                            ? Colors.pink[50]
-                            : Colors.green[100],
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
+                      trailing: Icon(
+                        Icons.info,
+                        color: Colors.red,
                       ),
-                    );
-                  }),
+                      title: Text(
+                        'กิน ${foods[index].foodName}',
+                      ),
+                      subtitle: Text(
+                          'วันที่ ${foods[index].foodDate},มื้อ ${foods[index].foodMeal}'),
+                      tileColor: index % 2 == 0
+                          ? const Color.fromARGB(255, 255, 237, 255)
+                          : const Color.fromARGB(255, 234, 255, 247).withOpacity(0.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -92,18 +108,18 @@ class _ShowAllFoodUiState extends State<ShowAllFoodUi> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => AddFoodUi(),
-            ),
+            MaterialPageRoute(builder: (context) => AddFoodUi()),
           ).then((value) {
+            //กลับมาหน่าแล้วจะให้ทำอะไร
+            //เรียก
             loadAllFood();
           });
         },
+        backgroundColor: Colors.red,
         child: Icon(
           Icons.add,
           color: Colors.white,
         ),
-        backgroundColor: Colors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

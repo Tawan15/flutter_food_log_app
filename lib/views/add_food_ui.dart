@@ -91,9 +91,9 @@ class _AddFoodUiState extends State<AddFoodUi> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         title: Text(
-          'กินกัน LOG (เพิ่มรายการ)',
+          'กินกับหนู LOG (เพิ่มรายการ)',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -325,7 +325,16 @@ class _AddFoodUiState extends State<AddFoodUi> {
                 SizedBox(height: 10),
                 // ปุ่มยกเลิก
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      foodNameCtrl.clear();
+                      foodPriceCtrl.clear();
+                      foodPersonCtrl.clear();
+                      foodDateCtrl.clear();
+                      foodMeal = 'เช้า';
+                      foodDate = null;
+                    });
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
